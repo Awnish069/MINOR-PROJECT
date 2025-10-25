@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume Builder</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+    <script>
+        // Tailwind dark mode config
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                },
+            },
+        };
+
+        // Set initial theme based on localStorage or system preference
+        if (
+            localStorage.getItem('color-theme') === 'dark' ||
+            (!('color-theme' in localStorage) &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body
+    class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col min-h-screen font-sans antialiased">
+
+    <header
+        class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm sticky top-0 z-40 w-full flex justify-between items-center px-6 py-4">
+        <div>
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Resume Builder</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">Create your professional developer resume.</p>
+        </div>
+        <button id="theme-toggle" aria-label="Toggle Dark Mode"
+            class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 p-2.5 rounded-lg focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700">
+            <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                </path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 6.464l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 100-2H2a1 1 0 100 2h1zM6.464 16.364l-.707.707a1 1 0 001.414 1.414l.707-.707a1 1 0 00-1.414-1.414z">
+                </path>
+            </svg>
+        </button>
+    </header>
+
+    <main class="flex-grow container mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl">
+
+        <!-- Form Section -->
+        <section>
+            <!-- Personal Details -->
+            <div class="form-section mb-8">
+                <h2 class="text-xl font-semibold mb-4">Personal Details</h2>
+                <div class="mt-4">
+                    <label for="profile-pic" class="block font-medium mb-1">Profile Picture</label>
+                    <input type="file" id="profile-pic" accept="image/*"
+                        class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200" />
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Suggested: 128x128 pixels and 1024 kb size
+                    </p>
+                </div>
+
+                <div>
+                    <label for="name" class="block font-medium mb-1">Full Name</label>
+                    <input type="text" id="name"
+                        class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="Awnish" />
+                </div>
+                <div class="mt-4">
+                    <label for="role" class="block font-medium mb-1">Role / Title</label>
+                    <input type="text" id="role"
+                        class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="Frontend Developer" />
+                </div>
+                <div class="mt-4">
+                    <label for="email" class="block font-medium mb-1">Email</label>
+                    <input type="email" id="email"
+                        class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="demo@gmail.com" />
+                </div>
+                <div class="mt-4">
+                    <label for="phone" class="block font-medium mb-1">Phone</label>
+                    <input type="tel" id="phone"
+                        class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="+91 XXXXX XXXXX" />
+                </div>
+                <div class="mt-4">
+                    <label for="linkedin" class="block font-medium mb-1">LinkedIn Profile URL</label>
+                    <input type="url" id="linkedin"
+                        class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="https://linkedin.com/in/username" />
+                </div>
+                <div class="mt-4">
+                    <label for="summary" class="block font-medium mb-1">Professional Summary</label>
+                    <textarea id="summary" rows="4"
+                        class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="A brief summary about your professional background..."></textarea>
+                </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="form-section mb-8">
+                <h2 class="text-xl font-semibold mb-4">Experience</h2>
+                <div id="experience-list" class="space-y-4"></div>
+                <button id="add-experience"
+                    class="text-indigo-600 hover:text-indigo-800 font-semibold mt-2 bg-transparent border-none cursor-pointer">
+                    + Add Experience
+                </button>
+            </div>
+
+            <!-- Projects -->
+            <div class="form-section mb-8">
+                <h2 class="text-xl font-semibold mb-4">Projects</h2>
+                <div id="project-list" class="space-y-4"></div>
+                <button id="add-project"
+                    class="text-indigo-600 hover:text-indigo-800 font-semibold mt-2 bg-transparent border-none cursor-pointer">
+                    + Add Project
+                </button>
+            </div>
+
+            <!-- Education -->
+            <div class="form-section mb-8">
+                <h2 class="text-xl font-semibold mb-4">Education</h2>
+                <div id="education-list" class="space-y-4"></div>
+                <button id="add-education"
+                    class="text-indigo-600 hover:text-indigo-800 font-semibold mt-2 bg-transparent border-none cursor-pointer">
+                    + Add Education
+                </button>
+            </div>
+
+            <!-- Skills -->
+            <div class="form-section">
+                <h2 class="text-xl font-semibold mb-4">Skills</h2>
+                <label for="skills" class="block font-medium mb-1">Skills (comma separated)</label>
+                <input type="text" id="skills"
+                    class="form-input w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                    placeholder="HTML, CSS, JavaScript, React, Node.js" />
+            </div>
+        </section>
+
+        <!-- Resume Preview Section -->
+        <section>
+            <div id="resume-preview-wrapper"
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+                <div id="resume-preview" class="text-gray-800 dark:text-gray-200">
+                    <div class="flex items-center gap-8 mb-8">
+                        <div id="preview-image-wrapper"
+                            class="w-32 h-32 rounded-full relative bg-indigo-200 dark:bg-indigo-800 flex items-center justify-center text-4xl font-bold text-indigo-800 dark:text-indigo-400 select-none overflow-hidden">
+                            <span id="initials">AK</span>
+                            <img id="preview-image" src="" alt="Profile"
+                                class="hidden w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-gray-600 absolute top-0 left-0" />
+                        </div>
+
+                        <div>
+                            <h1 id="preview-name" class="text-4xl font-bold text-gray-900 dark:text-white">Awnish</h1>
+                            <p id="preview-role" class="text-xl text-indigo-600 dark:text-indigo-400 mt-1">Frontend
+                                Developer</p>
+                            <div id="preview-contact"
+                                class="text-sm text-gray-600 dark:text-gray-400 mt-3 flex flex-col gap-1">
+                                <span id="preview-email">demo@gmail.com</span>
+                                <span id="preview-phone">+91 XXXXX XXXXX</span>
+                                <a id="preview-linkedin" href="#"
+                                    class="text-indigo-600 dark:text-indigo-400 hover:underline">https://linkedin.com/in/username</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resume-section mb-8">
+                        <h2 class="text-2xl font-semibold mb-2">Summary</h2>
+                        <p id="preview-summary" class="text-gray-700 dark:text-gray-300 text-sm">
+                            A brief summary about your professional background...
+                        </p>
+                    </div>
+
+                    <div class="resume-section mb-8">
+                        <h2 class="text-2xl font-semibold mb-2">Experience</h2>
+                        <div id="preview-experience-list" class="space-y-4"></div>
+                    </div>
+
+                    <div class="resume-section mb-8">
+                        <h2 class="text-2xl font-semibold mb-2">Projects</h2>
+                        <div id="preview-project-list" class="space-y-4"></div>
+                    </div>
+
+                    <div class="resume-section mb-8">
+                        <h2 class="text-2xl font-semibold mb-2">Education</h2>
+                        <div id="preview-education-list" class="space-y-4"></div>
+                    </div>
+
+                    <div class="resume-section">
+                        <h2 class="text-2xl font-semibold mb-2">Skills</h2>
+                        <div id="preview-skills" class="flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <div id="resume-preview-wrapper"
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+                        <!-- all your resume content here (profile image, name, sections, etc.) -->
+                    </div>
+
+                    <!--the button is outside the download area! -->
+                    <button id="download-pdf"
+                        class="no-print mt-8 bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 w-full">
+                        Download PDF
+                    </button>
+
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Show correct icon on load
+        if (document.documentElement.classList.contains('dark')) {
+            darkIcon.classList.remove('hidden');
+            lightIcon.classList.add('hidden');
+        } else {
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            darkIcon.classList.toggle('hidden');
+            lightIcon.classList.toggle('hidden');
+
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+
+        // Resume form and preview handling (same as previous example)
+        const experienceList = document.getElementById('experience-list');
+        const projectList = document.getElementById('project-list');
+        const educationList = document.getElementById('education-list');
+
+        const previewName = document.getElementById('preview-name');
+        const previewRole = document.getElementById('preview-role');
+        const previewEmail = document.getElementById('preview-email');
+        const previewPhone = document.getElementById('preview-phone');
+        const previewLinkedin = document.getElementById('preview-linkedin');
+        const previewSummary = document.getElementById('preview-summary');
+        const previewExperienceList = document.getElementById('preview-experience-list');
+        const previewProjectList = document.getElementById('preview-project-list');
+        const previewEducationList = document.getElementById('preview-education-list');
+        const previewSkills = document.getElementById('preview-skills');
+
+        const nameInput = document.getElementById('name');
+        const roleInput = document.getElementById('role');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const linkedinInput = document.getElementById('linkedin');
+        const summaryInput = document.getElementById('summary');
+        const skillsInput = document.getElementById('skills');
+
+        nameInput.addEventListener('input', () => previewName.textContent = nameInput.value || 'Awnish Kumar');
+        roleInput.addEventListener('input', () => previewRole.textContent = roleInput.value || 'Frontend Developer');
+        emailInput.addEventListener('input', () => previewEmail.textContent = emailInput.value || 'demo@gmail.com');
+        phoneInput.addEventListener('input', () => previewPhone.textContent = phoneInput.value || '+91 XXXXX XXXXX');
+        linkedinInput.addEventListener('input', () => {
+            previewLinkedin.textContent = linkedinInput.value || 'https://linkedin.com/in/username';
+            previewLinkedin.href = linkedinInput.value || '#';
+        });
+        summaryInput.addEventListener('input', () => previewSummary.textContent = summaryInput.value || 'A brief summary about your professional background...');
+        skillsInput.addEventListener('input', () => {
+            previewSkills.innerHTML = '';
+            if (skillsInput.value.trim() === '') return;
+            skillsInput.value.split(',').map(s => s.trim()).filter(Boolean).forEach(skill => {
+                const span = document.createElement('span');
+                span.textContent = skill;
+                span.className = 'bg-indigo-200 text-indigo-800 rounded px-2 py-1 text-xs font-semibold';
+                previewSkills.appendChild(span);
+            });
+        });
+
+        const initialsSpan = document.getElementById('initials'); // Add this!
+        const previewImage = document.getElementById('preview-image');
+        const profilePicInput = document.getElementById('profile-pic');
+
+        // Function to compute initials from full name
+        function getInitials(name) {
+            if (!name) return 'A';
+            const arr = name.trim().split(' ');
+            if (arr.length === 1) return arr[0][0].toUpperCase();
+            return (arr[0][0] + arr[arr.length - 1][0]).toUpperCase();
+        }
+
+        // Update initials live (only if no image is shown)
+        nameInput.addEventListener('input', () => {
+            if (previewImage.classList.contains('hidden')) {
+                initialsSpan.textContent = getInitials(nameInput.value) || 'A';
+            }
+        });
+
+        // Show uploaded image or initials
+        profilePicInput.addEventListener('change', () => {
+            const file = profilePicInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    previewImage.classList.remove('hidden');
+                    initialsSpan.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.src = '';
+                previewImage.classList.add('hidden');
+                initialsSpan.style.display = '';
+                initialsSpan.textContent = getInitials(nameInput.value) || 'A';
+            }
+        });
+
+
+
+        function createEntry(type) {
+            const container = document.createElement('div');
+            container.className = 'entry border p-4 rounded bg-gray-50 dark:bg-gray-700 relative max-w-xl mx-auto mb-2';
+
+            // Title Label
+            const titleLabel = document.createElement('label');
+            titleLabel.textContent = `${type} Title`;
+            titleLabel.className = 'block font-medium mb-1';
+            container.appendChild(titleLabel);
+
+            // Title Input
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.placeholder = `${type} Title`;
+            titleInput.className = 'form-input mb-2 w-full dark:bg-gray-800 dark:text-gray-200';
+            container.appendChild(titleInput);
+
+            // Description Label
+            const descriptionLabel = document.createElement('label');
+            descriptionLabel.textContent = `${type} Description`;
+            descriptionLabel.className = 'block font-medium mb-1 mt-2';
+            container.appendChild(descriptionLabel);
+
+            // Description Input
+            const descriptionInput = document.createElement('textarea');
+            descriptionInput.rows = 2;
+            descriptionInput.placeholder = `${type} Description`;
+            descriptionInput.className = 'form-input mb-2 w-full dark:bg-gray-800 dark:text-gray-200';
+            container.appendChild(descriptionInput);
+
+            // Remove Button
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'Remove';
+            removeBtn.className = 'text-red-600 font-semibold text-sm hover:underline absolute top-2 right-2 bg-transparent border-none cursor-pointer';
+            container.appendChild(removeBtn);
+
+            removeBtn.addEventListener('click', () => {
+                container.remove();
+                updatePreview(type.toLowerCase() + 'List');
+            });
+
+            titleInput.addEventListener('input', () => updatePreview(type.toLowerCase() + 'List'));
+            descriptionInput.addEventListener('input', () => updatePreview(type.toLowerCase() + 'List'));
+
+            return container;
+        }
+
+
+        function updatePreview(listName) {
+            let previewContainer;
+            let nodes;
+            switch (listName) {
+                case 'experienceList':
+                    previewContainer = previewExperienceList;
+                    nodes = experienceList.children;
+                    break;
+                case 'projectList':
+                    previewContainer = previewProjectList;
+                    nodes = projectList.children;
+                    break;
+                case 'educationList':
+                    previewContainer = previewEducationList;
+                    nodes = educationList.children;
+                    break;
+                default:
+                    return;
+            }
+            previewContainer.innerHTML = '';
+            Array.from(nodes).forEach(node => {
+                const title = node.querySelector('input[type=text]').value.trim();
+                const desc = node.querySelector('textarea').value.trim();
+                if (title || desc) {
+                    const item = document.createElement('div');
+                    if (title) {
+                        const h3 = document.createElement('h3');
+                        h3.textContent = title;
+                        h3.className = 'font-semibold text-lg';
+                        item.appendChild(h3);
+                    }
+                    if (desc) {
+                        const p = document.createElement('p');
+                        p.textContent = desc;
+                        p.className = 'text-gray-700 dark:text-gray-300 text-sm';
+                        item.appendChild(p);
+                    }
+                    previewContainer.appendChild(item);
+                }
+            });
+        }
+
+        document.getElementById('add-experience').addEventListener('click', () => {
+            experienceList.appendChild(createEntry('Experience'));
+        });
+        document.getElementById('add-project').addEventListener('click', () => {
+            projectList.appendChild(createEntry('Project'));
+        });
+        document.getElementById('add-education').addEventListener('click', () => {
+            educationList.appendChild(createEntry('Education'));
+        });
+
+        experienceList.appendChild(createEntry('Experience'));
+        projectList.appendChild(createEntry('Project'));
+        educationList.appendChild(createEntry('Education'));
+
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            const element = document.getElementById('resume-preview-wrapper');
+            html2pdf().from(element).set({
+                margin: 0.5,
+                filename: `${nameInput.value || 'resume'}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            }).save();
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</body>
+
+</html>
